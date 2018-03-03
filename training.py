@@ -4,6 +4,7 @@ from torch.utils.data import DataLoader
 import numpy as np
 from torch.autograd import Variable
 from torch import optim
+import torch
 
 from siamese_network import SiameseNetwork, ContrastiveLoss
 from utils import imshow, show_plot, save_checkpoint
@@ -50,9 +51,10 @@ def main():
                 iteration_number +=10
                 counter.append(iteration_number)
                 loss_history.append(loss_contrastive.data[0])
-    save_checkpoint({
-        'epoch': epoch + 1,
-        })
+    torch.save(net.state_dict(), "trained_weights.pt")
+    # save_checkpoint({
+    #     'epoch': epoch + 1,
+    #     })
 
 
     show_plot(counter,loss_history)
