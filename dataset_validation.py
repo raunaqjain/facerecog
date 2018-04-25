@@ -22,7 +22,7 @@ def main():
                         batch_size=8)
 
     dataiter = iter(vis_dataloader)
-    print (dataiter)
+
     example_batch = next(dataiter)
     concatenated = torch.cat((example_batch[0],example_batch[1]),0)
     print(example_batch[2].numpy())

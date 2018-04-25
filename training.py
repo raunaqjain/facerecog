@@ -18,7 +18,7 @@ def main():
 
     print ("Training starts...")
     folder_dataset = dset.ImageFolder(root=Config.training_dir)
-    siamese_dataset = SiameseNetworkDataset(imageFolderDataset=folder_dataset,
+    siamese_dataset = Contrastive_Dataset(imageFolderDataset=folder_dataset,
                                             transform=transforms.Compose([transforms.Resize((100,100)),
                                                                           transforms.ToTensor()
                                                                           ])

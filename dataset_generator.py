@@ -50,3 +50,42 @@ class SiameseNetworkDataset(Dataset):
 
     def __len__(self):
         return len(self.imageFolderDataset.imgs)
+
+class Triplet_dataset(Dataset):
+
+    def __init__(self, imageFolderDataset, transform=None, should_invert=True):
+        self.imageFolderDataset = imageFolderDataset
+        self.transform = transform
+        self.should_invert = should_invert
+
+    def __getitem__(self, index):
+        anchor_tuple = random.choice(self.imageFolderDataset.imgs)
+        while True:
+            positive_tuple = random.choice(self.imageFolderDataset.imgs)
+            if positive_tuple[1] == anchor_tuple[1]:
+                break
+
+        while True:
+            negative_tuple = random.choice(self.imageFolderDataset.imgs)
+            if negative_tuple[1] != anchor_tuple[1]:
+                break
+
+        anchor = Image.open(anchor_tuple[0])
+        positive = Image.open(positive_tuple[0])
+        negative = Image.open(negative_tuple[0])
+
+        anchor = anchor.convert("L")
+        positive = positive.convert("L")
+        negative = negative.convert("L")
+
+        if self.should_invert:
+            anchor = PIL.ImageOps.invert(anchor)
+            positive = PIL.ImageOps.invert(positive)
+            negative = PIL.ImageOps.invert(negative)
+
+        if self.transform is not None:
+            anchor = self.transform(anchor)
+            positive = self.transform(positive)
+            neagtive = self.transform(neagtive)
+
+        return anchor, positive, negative

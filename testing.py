@@ -18,6 +18,7 @@ import matplotlib
 matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
 
+
 def main():
 	parser = argparse.ArgumentParser()
 	parser.add_argument('-img', type=str, default='test.jpg')
@@ -40,23 +41,20 @@ def main():
 	img = transform(img)
 	# Add a dimension to image to make padding possible.
 	img = img[None,:,:,:]
-	print (img.size())
 
 	test_dataloader = DataLoader(siamese_dataset,num_workers=3,batch_size=1)
 	dataiter = iter(test_dataloader)
-	x0,_,_ = next(dataiter)
 	net = SiameseNetwork()
 	net.load_state_dict(torch.load("trained_weights.pt"))
 
-	for i in range(3):
+	for i in range(4):
 		   _,x1,label2 = next(dataiter)
-		   print (x1.size())
 		   concatenated = torch.cat((img,x1),0)
 
 		   output1,output2 = net(Variable(img),Variable(x1))
 		   euclidean_distance = F.pairwise_distance(output1, output2)
 		   imshow(torchvision.utils.make_grid(concatenated),'Dissimilarity: \
-					{:.2f}'.format(euclidean_distance.cpu().data.numpy()[0][0]))
+					{:.2f}'.format(euclidean_distance.data.numpy()[0][0]))
 
 
 
